@@ -87,9 +87,12 @@ class RegressionsTestCase(cases.BaseServerTestCase):
         self.addClient(1)
         self.sendLine(1, 'NICK *')
         self.sendLine(1, 'USER u s e r')
-        replies = set(msg.command for msg in self.getMessages(1))
-        self.assertIn(ERR_ERRONEUSNICKNAME, replies)
-        self.assertNotIn(RPL_WELCOME, replies)
+        while True:
+            msg = self.getRegistrationMessage(1)
+            if msg.command == ERR_ERRONEUSNICKNAME:
+                break
+            elif msg.command == RPL_WELCOME:
+                raise Exception("Registration succeeded with an invalid nick")
 
         self.sendLine(1, 'NICK valid')
         replies = set(msg.command for msg in self.getMessages(1))
