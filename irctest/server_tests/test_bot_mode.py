@@ -69,6 +69,7 @@ class BotModeTestCase(cases.BaseServerTestCase):
         self.connectClient("usernick", "user", capabilities=["message-tags"])
 
         self.sendLine("bot", "PRIVMSG usernick :beep boop")
+        self.getMessages("bot")
         self.assertMessageMatch(
             self.getMessage("user"),
             command="PRIVMSG",
@@ -87,6 +88,7 @@ class BotModeTestCase(cases.BaseServerTestCase):
         self.getMessages("user")
 
         self.sendLine("bot", "PRIVMSG #chan :beep boop")
+        self.getMessages("bot")
         self.assertMessageMatch(
             self.getMessage("user"),
             command="PRIVMSG",
